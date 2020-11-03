@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { appContext } from '../helpers/context'
+
 export default function HomeScreen () {
   const { auth } = useContext(appContext)
 

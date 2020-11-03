@@ -1,9 +1,20 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 
-export const appContext = createContext()
+export const appContext = createContext({
+  layout: {
+    drawerIsOpen: false,
+    toogleDrawer: () => {},
+    closeDrawer: () => {},
+    topbarIsVisible: true,
+    setTopbar: () => {},
+    initialLoading: true
+  },
+  auth: { user: null, setAuthUser: () => {} }
+})
 
 const AppContextProvider = (props) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [topbarIsVisible, setTopbarIsVisible] = useState(true)
   const [user, setUser] = useState()
 
@@ -15,15 +26,27 @@ const AppContextProvider = (props) => {
   }
 
   const setAuthUser = (user) => {
+    localStorage.setItem('user', JSON.stringify(user))
     setUser(user)
   }
   const setTopbar = (state = true) => {
     setTopbarIsVisible(state)
   }
 
+  useEffect(() => {
+    setInitialLoading(false)
+  })
+
   return (
     <appContext.Provider value={{
-      layout: { drawerIsOpen, toogleDrawer, closeDrawer, topbarIsVisible, setTopbar },
+      layout: {
+        drawerIsOpen,
+        toogleDrawer,
+        closeDrawer,
+        topbarIsVisible,
+        setTopbar,
+        initialLoading
+      },
       auth: { user, setAuthUser }
     }}>
       {props.children}

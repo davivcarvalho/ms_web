@@ -52,8 +52,6 @@ export default function LoginScreen () {
     }
     http.post('/auth/login', data)
       .then(response => {
-        console.log(response)
-
         const { user } = response.data
         if (!user) return
         auth.setAuthUser(user)
