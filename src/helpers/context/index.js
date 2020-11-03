@@ -26,14 +26,10 @@ const AppContextProvider = (props) => {
   }
 
   const setAuthUser = (user, { persist } = {}) => {
-    localStorage.setItem('user', JSON.stringify(user))
-    setUser(user)
-
-    if (!persist) {
-      window.addEventListener('beforeunload', (e) => {
-        localStorage.removeItem('user')
-      })
+    if (persist) {
+      localStorage.setItem('user', JSON.stringify(user))
     }
+    setUser(user)
   }
   const setTopbar = (state = true) => {
     setTopbarIsVisible(state)

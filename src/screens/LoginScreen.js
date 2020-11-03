@@ -76,9 +76,11 @@ export default function LoginScreen () {
         const { user } = response.data
         if (!user) return
         auth.setAuthUser(user, { persist: remember.current.checked })
-        history.push('/')
         setLoading(false)
         setSuccess(true)
+        setTimeout(() => {
+          history.push('/')
+        }, 300)
       })
       .catch(() => {
         setLoading(false)
@@ -113,7 +115,7 @@ export default function LoginScreen () {
             label="Senha"
             type="password"
             id="password"
-            autoComplete="current-password"r
+            autoComplete="current-password"
             inputRef={password}
             disabled={loading}
           />
