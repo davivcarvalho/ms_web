@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect, useState } from 'react'
 
-function App() {
+import LoginScreen from './screens/LoginScreen'
+import { Route, Switch } from 'react-router-dom'
+import { getLoggedUser } from './helpers/auth'
+import { appContext } from './helpers/context'
+import HomeScreen from './screens/HomeScreen'
+
+function App () {
+  const { auth } = useContext(appContext)
+
+  useEffect(() => {
+    const user = getLoggedUser(true)
+    if (user) {
+      auth.setAuthUser(user)
+    }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Switch>
+      <Route exact path="/" component={HomeScreen} />
+      <Route path="/auth/login" component={LoginScreen} />
+    </Switch>
+  )
 }
 
-export default App;
+export default App
