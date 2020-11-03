@@ -3,13 +3,13 @@ import React, { createContext, useEffect, useState } from 'react'
 export const appContext = createContext({
   layout: {
     drawerIsOpen: false,
-    toogleDrawer: () => {},
-    closeDrawer: () => {},
+    toogleDrawer: () => { },
+    closeDrawer: () => { },
     topbarIsVisible: true,
-    setTopbar: () => {},
+    setTopbar: () => { },
     initialLoading: true
   },
-  auth: { user: null, setAuthUser: () => {} }
+  auth: { user: null, setAuthUser: () => { } }
 })
 
 const AppContextProvider = (props) => {
@@ -25,9 +25,15 @@ const AppContextProvider = (props) => {
     setDrawerIsOpen(false)
   }
 
-  const setAuthUser = (user) => {
+  const setAuthUser = (user, { persist } = {}) => {
     localStorage.setItem('user', JSON.stringify(user))
     setUser(user)
+
+    if (!persist) {
+      window.addEventListener('beforeunload', (e) => {
+        localStorage.removeItem('user')
+      })
+    }
   }
   const setTopbar = (state = true) => {
     setTopbarIsVisible(state)

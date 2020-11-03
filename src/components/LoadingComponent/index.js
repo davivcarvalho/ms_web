@@ -3,7 +3,10 @@ import { appContext } from '../../helpers/context'
 
 export default function LoadingComponent () {
   useEffect(() => {
-    document.getElementById('bootSpinner').remove()
+    const bootSpinner = document.getElementById('bootSpinner')
+    if (bootSpinner) {
+      bootSpinner.remove()
+    }
   })
 
   return (

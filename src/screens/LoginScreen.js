@@ -42,6 +42,7 @@ export default function LoginScreen () {
   const { auth } = useContext(appContext)
   const ac = useRef()
   const password = useRef()
+  const remember = useRef()
   const history = useHistory()
 
   const handleSubmitForm = (e) => {
@@ -54,7 +55,7 @@ export default function LoginScreen () {
       .then(response => {
         const { user } = response.data
         if (!user) return
-        auth.setAuthUser(user)
+        auth.setAuthUser(user, { persist: remember.current.checked })
         history.push('/')
       })
       .catch(error => {
@@ -92,7 +93,7 @@ export default function LoginScreen () {
             inputRef={password}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox color="primary" inputRef={remember} value="0"/>}
             label="Lembrar-me"
           />
           <Button

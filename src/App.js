@@ -33,7 +33,7 @@ function App () {
     const userString = localStorage.getItem('user')
     const user = JSON.parse(userString)
     if (user) {
-      auth.setAuthUser(user)
+      auth.setAuthUser(user, {})
       return
     }
 
