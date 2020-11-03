@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -12,6 +12,9 @@ import Container from '@material-ui/core/Container'
 import { appContext } from '../helpers/context'
 import http from '../helpers/http'
 import { useHistory } from 'react-router-dom'
+import { CircularProgress, Snackbar } from '@material-ui/core'
+import { green } from '@material-ui/core/colors'
+import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,11 +37,27 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  buttonSuccess: {
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700]
+    }
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12
   }
 }))
 
 export default function LoginScreen () {
   const classes = useStyles()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
   const { auth } = useContext(appContext)
   const ac = useRef()
   const password = useRef()
@@ -51,15 +70,19 @@ export default function LoginScreen () {
       ac: ac.current.value,
       password: password.current.value
     }
+    setLoading(true)
     http.post('/auth/login', data)
       .then(response => {
         const { user } = response.data
         if (!user) return
         auth.setAuthUser(user, { persist: remember.current.checked })
         history.push('/')
+        setLoading(false)
+        setSuccess(true)
       })
-      .catch(error => {
-        console.log(error)
+      .catch(() => {
+        setLoading(false)
+        setError(true)
       })
   }
 
@@ -79,6 +102,7 @@ export default function LoginScreen () {
             autoComplete="ac"
             autoFocus
             inputRef={ac}
+            disabled={loading}
           />
           <TextField
             variant="outlined"
@@ -91,18 +115,23 @@ export default function LoginScreen () {
             id="password"
             autoComplete="current-password"r
             inputRef={password}
+            disabled={loading}
           />
           <FormControlLabel
             control={<Checkbox color="primary" inputRef={remember} value="0"/>}
             label="Lembrar-me"
+            disabled={loading}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            disabled={loading}
+            className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
           >
+          {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
             Entrar
           </Button>
           <Grid container>
@@ -121,6 +150,8 @@ export default function LoginScreen () {
           Em desenvolvimento por: PACM
         </Typography>
       </Box>
+      <Snackbar open={error} onClose={() => setError(false)} autoHideDuration={3000} message="Falha na tentativa de Login. Verifique seu registro e senha e tente novamente!">
+      </Snackbar>
     </Container>
   )
 }
