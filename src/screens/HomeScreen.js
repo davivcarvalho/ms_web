@@ -1,13 +1,20 @@
-import React, { useContext } from 'react'
-import { appContext } from '../helpers/context'
+import React, { Fragment, useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import SettingIcon from '@material-ui/icons/Settings'
+import { Build } from '@material-ui/icons'
+import HomeIcon from '@material-ui/icons/Home'
+
+import { useHistory } from 'react-router-dom'
+import AppBarComponent from '../components/AppBarComponent'
+import BottomNavigationComponent from '../components/BottomNavigationComponent'
 
 export default function HomeScreen () {
-  const { auth } = useContext(appContext)
-
   return (
-    <div>
-      <h1>Home Screen</h1>
-      <h1>{ auth.user && auth.user.name}</h1>
-    </div>
+    <Fragment>
+      <AppBarComponent/>
+      <BottomNavigationComponent/>
+    </Fragment>
   )
 }
