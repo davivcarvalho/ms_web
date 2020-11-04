@@ -9,7 +9,7 @@ export const appContext = createContext({
     setTopbar: () => { },
     appLoading: true
   },
-  auth: { user: null, setAuthUser: () => { } }
+  auth: { user: null, setAuthUser: () => {}, logoutUser: () => {} }
 })
 
 const AppContextProvider = (props) => {
@@ -31,6 +31,11 @@ const AppContextProvider = (props) => {
     }
     setUser(user)
   }
+
+  const logoutUser = () => {
+    localStorage.removeItem('user')
+    setUser(null)
+  }
   const setTopbar = (state = true) => {
     setTopbarIsVisible(state)
   }
@@ -49,7 +54,7 @@ const AppContextProvider = (props) => {
         setTopbar,
         appLoading
       },
-      auth: { user, setAuthUser }
+      auth: { user, setAuthUser, logoutUser }
     }}>
       {props.children}
     </appContext.Provider>

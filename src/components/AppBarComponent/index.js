@@ -2,6 +2,7 @@ import { AppBar, IconButton, makeStyles, MenuItem, Toolbar, Typography, Menu, Bu
 import { red } from '@material-ui/core/colors'
 import { AccountCircle } from '@material-ui/icons'
 import React, { useContext, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { appContext } from '../../helpers/context'
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -30,17 +31,15 @@ export default function AppBarComponent ({
   title = '',
   withoutDrawer = false
 }) {
+  const router = useHistory()
   const classes = useStyles()
   const { auth } = useContext(appContext)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const open = Boolean(anchorEl)
+  const anchorEl = useRef()
+  const [showUserDropdow, setShowUserDropdow] = useState(false)
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleLogoutButton = () => {
+    setShowUserDropdow(false)
+    auth.logoutUser()
   }
 
   return (
@@ -62,25 +61,18 @@ export default function AppBarComponent ({
                 aria-controls="customized-menu"
                 aria-haspopup="true"
                 variant="contained"
-                onClick={handleMenu}
+                onClick={() => setShowUserDropdow(true)}
                 color="inherit"
+                ref={anchorEl}
               >
                 <Avatar src={auth.user.avatar} />
               </IconButton>
               <Menu
                 id="customized-menu"
                 styles={{ width: 400, heigth: 300 }}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left'
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center'
-                }}
-                open={open}
-                onClose={handleClose}
+                anchorEl={anchorEl.current}
+                open={showUserDropdow}
+                onClose={() => setShowUserDropdow(false)}
                 keepMounted
               >
               <div className={classes.type}>
@@ -88,12 +80,12 @@ export default function AppBarComponent ({
                 <Typography variant="h6"> {auth.user.name} </Typography>
                 <Typography variant="subtitle2"> {auth.user.ac} </Typography>
               </div>
-                <MenuItem className={classes.logoutButton} onClick={handleClose}>Sair</MenuItem>
+                <MenuItem className={classes.logoutButton} onClick={handleLogoutButton}>Sair</MenuItem>
               </Menu>
             </div>
             )
           : (
-            <Button color="inherit">Entrar</Button>
+            <Button color="inherit" onClick={() => router.push('/auth/login')}>Entrar</Button>
             )}
       </Toolbar>
     </AppBar>
