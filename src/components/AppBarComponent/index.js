@@ -1,6 +1,6 @@
 import { AppBar, IconButton, makeStyles, MenuItem, Toolbar, Typography, Menu, Button, Avatar } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
-import { AccountCircle } from '@material-ui/icons'
+import { Menu as MenuIcon } from '@material-ui/icons'
 import React, { useContext, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { appContext } from '../../helpers/context'
@@ -45,9 +45,9 @@ export default function AppBarComponent ({
   return (
     <AppBar position="static">
       <Toolbar>
-        {!withoutDrawer && (
+        {withoutDrawer && (
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <Menu />
+            <MenuIcon />
           </IconButton>
         )}
         <Typography variant="h6" className={classes.title}>
@@ -60,7 +60,6 @@ export default function AppBarComponent ({
                 aria-label="account of current user"
                 aria-controls="customized-menu"
                 aria-haspopup="true"
-                variant="contained"
                 onClick={() => setShowUserDropdow(true)}
                 color="inherit"
                 ref={anchorEl}
@@ -69,11 +68,11 @@ export default function AppBarComponent ({
               </IconButton>
               <Menu
                 id="customized-menu"
-                styles={{ width: 400, heigth: 300 }}
+                variant="menu"
                 anchorEl={anchorEl.current}
-                open={showUserDropdow}
                 onClose={() => setShowUserDropdow(false)}
                 keepMounted
+                open={showUserDropdow}
               >
               <div className={classes.type}>
                 <Avatar src={auth.user.avatar} />
