@@ -74,18 +74,18 @@ export default function AppBarComponent ({
                 keepMounted
                 open={showUserDropdow}
               >
-              <div className={classes.type}>
-                <Avatar src={auth.user.avatar} />
-                <Typography variant="h6"> {auth.user.name} </Typography>
-                <Typography variant="subtitle2"> {auth.user.ac} </Typography>
-              </div>
+                <div className={classes.type}>
+                  <Avatar src={auth.user.avatar} />
+                  <Typography variant="h6"> {auth.user.name} </Typography>
+                  <Typography variant="subtitle2"> {auth.user.ac} </Typography>
+                </div>
                 <MenuItem className={classes.logoutButton} onClick={handleLogoutButton}>Sair</MenuItem>
               </Menu>
             </div>
-            )
+          )
           : (
             <Button color="inherit" onClick={() => router.push('/auth/login')}>Entrar</Button>
-            )}
+          )}
       </Toolbar>
     </AppBar>
   )

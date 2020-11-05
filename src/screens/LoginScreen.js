@@ -132,7 +132,7 @@ export default function LoginScreen () {
             disabled={loading}
             className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
           >
-          {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
             Entrar
           </Button>
