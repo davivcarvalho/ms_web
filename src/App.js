@@ -5,6 +5,7 @@ import { Route, Switch, useHistory } from 'react-router-dom'
 import { appContext } from './helpers/context'
 import HomeScreen from './screens/HomeScreen'
 import LoadingComponent from './components/LoadingComponent'
+import RegisterScreen from './screens/RegisterScreen'
 
 function App () {
   const { auth, layout } = useContext(appContext)
@@ -27,6 +28,7 @@ function App () {
         <Switch>
           <Route path="/" exact component={HomeScreen} />
           <Route path="/auth/login" component={LoginScreen} />
+          <Route path="/auth/register" component={RegisterScreen} />
         </Switch>
         <LoadingComponent />
       </Fragment>

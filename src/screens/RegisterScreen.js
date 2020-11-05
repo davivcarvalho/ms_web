@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function LoginScreen () {
+export default function RegisterScreen () {
   const classes = useStyles()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -135,13 +135,13 @@ export default function LoginScreen () {
           >
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
-            Entrar
+            Registrar
           </Button>
           <Grid container>
             <Grid item xs>
             </Grid>
             <Grid item>
-              <Link href="#" onClick={() => history.push('/auth/register')} variant="body2">
+              <Link href="#" variant="body2">
                 Cadastrar
               </Link>
             </Grid>
