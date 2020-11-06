@@ -200,7 +200,7 @@ export default function RegisterScreen () {
             fullWidth
             variant="contained"
             color="primary"
-            disabled={loading}
+            disabled={loading || success}
             className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
           >
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
