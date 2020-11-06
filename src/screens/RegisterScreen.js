@@ -59,6 +59,7 @@ export default function RegisterScreen () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [formError, setFormError] = useState()
   const [roleSelectValue, setRoleSelectValue] = useState('')
   const { auth } = useContext(appContext)
   const name = useRef()
@@ -69,12 +70,7 @@ export default function RegisterScreen () {
 
   const handleSubmitForm = (e) => {
     e.preventDefault()
-    const data = {
-      name: name.current.value,
-      role: roleSelectValue,
-      ac: ac.current.value,
-      password: password.current.value
-    }
+    const { data, hasError } = extractFormData()
     setLoading(true)
     http.post('/user', data)
       .then(response => {
@@ -94,6 +90,25 @@ export default function RegisterScreen () {
         setLoading(false)
         setError(true)
       })
+  }
+
+  const extractFormData = () => {
+    const data = {
+      name: name.current.value,
+      role: roleSelectValue,
+      ac: ac.current.value,
+      password: password.current.value
+    }
+    const passwordConfirmation = passwordConfirm.current
+    const error = { }
+
+    if (!data.name || data.name.length < 1) error.name = true
+    if (!data.role || data.role.length < 1) error.role = true
+    if (!data.ac || data.ac.length < 1) error.ac = true
+    if (!data.password || data.password.length < 1) error.password = true
+    if (!passwordConfirmation || data.password !== passwordConfirmation) error.passwordConfirm = true
+
+    return { data, error, hasError: Object.keys(error).length === 0 }
   }
 
   return (
@@ -194,6 +209,15 @@ export default function RegisterScreen () {
           </Button>
         </form>
       </div>
+      <Grid container>
+        <Grid item xs>
+        </Grid>
+        <Grid item>
+          <Link href="#" onClick={() => history.push('/auth/login')} variant="body2">
+          Voltar para o Login
+          </Link>
+        </Grid>
+      </Grid>
       <Box mt={8}>
         <Typography variant="body2" color="textSecondary" align="center">
           Em desenvolvimento por: PACM
