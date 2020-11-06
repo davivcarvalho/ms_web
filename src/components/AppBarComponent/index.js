@@ -1,10 +1,13 @@
 import { AppBar, IconButton, makeStyles, MenuItem, Toolbar, Typography, Menu, Button, Avatar } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
-import { Menu as MenuIcon } from '@material-ui/icons'
+import { Close, Menu as MenuIcon } from '@material-ui/icons'
 import React, { useContext, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { appContext } from '../../helpers/context'
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    zIndex: 1350
+  },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -38,11 +41,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AppBarComponent ({
   title = '',
-  withoutDrawer = false
+  withDrawer = false
 }) {
   const router = useHistory()
   const classes = useStyles()
-  const { auth } = useContext(appContext)
+  const { auth, layout } = useContext(appContext)
   const anchorEl = useRef()
   const [showUserDropdow, setShowUserDropdow] = useState(false)
 
@@ -58,12 +61,19 @@ export default function AppBarComponent ({
     return ''
   }
 
+  const toogleDrawer = () => {
+    layout.toogleDrawer()
+  }
+
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-        {withoutDrawer && (
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
+        {withDrawer && (
+          <IconButton edge="start" onClick={toogleDrawer} className={classes.menuButton} color="inherit" aria-label="menu">
+            { layout.drawerIsOpen
+              ? <Close />
+              : <MenuIcon />
+            }
           </IconButton>
         )}
         <Typography variant="h6" className={classes.title}>

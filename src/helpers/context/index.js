@@ -18,7 +18,11 @@ const AppContextProvider = (props) => {
   const [topbarIsVisible, setTopbarIsVisible] = useState(true)
   const [user, setUser] = useState()
 
-  const toogleDrawer = () => {
+  const toogleDrawer = (forceClose) => {
+    if (forceClose) {
+      setDrawerIsOpen(false)
+      return
+    }
     setDrawerIsOpen(!drawerIsOpen)
   }
   const closeDrawer = () => {

@@ -33,8 +33,8 @@ export default function BottomNavigationComponent () {
       showLabels
       className={classes.root}
     >
-      <BottomNavigationAction label="Equipamentos" icon={<Settings />} />
-      <BottomNavigationAction label="Inicio" icon={<Home />} />
+      <BottomNavigationAction onClick={() => router.push('/equipamentos')} label="Equipamentos" icon={<Settings />} />
+      <BottomNavigationAction onClick={() => router.push('/')} label="Inicio" icon={<Home />} />
       <BottomNavigationAction label="Solicitações" icon={<Build />} />
     </BottomNavigation>
   )
