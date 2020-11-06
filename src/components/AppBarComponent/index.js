@@ -13,10 +13,16 @@ const useStyles = makeStyles((theme) => ({
   },
   type: {
     padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+    minWidth: 150,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  avatar: {
+    marginBottom: 10,
+    width: 65,
+    height: 65
   },
   logoutButton: {
     textAlign: 'center',
@@ -24,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: red[400]
+  },
+  roleText: {
+    marginTop: 5
   }
 }))
 
@@ -40,6 +49,13 @@ export default function AppBarComponent ({
   const handleLogoutButton = () => {
     setShowUserDropdow(false)
     auth.logoutUser()
+  }
+
+  const roleText = (role) => {
+    if (role === 'maintenance') return 'Mantenedor'
+    if (role === 'operator') return 'Operador'
+
+    return ''
   }
 
   return (
@@ -75,9 +91,10 @@ export default function AppBarComponent ({
                 open={showUserDropdow}
               >
                 <div className={classes.type}>
-                  <Avatar src={auth.user.avatar} />
+                  <Avatar className={classes.avatar} src={auth.user.avatar} />
                   <Typography variant="h6"> {auth.user.name} </Typography>
                   <Typography variant="subtitle2"> {auth.user.ac} </Typography>
+                  <Typography className={classes.roleText} variant="body2"> {roleText(auth.user.role)} </Typography>
                 </div>
                 <MenuItem className={classes.logoutButton} onClick={handleLogoutButton}>Sair</MenuItem>
               </Menu>
