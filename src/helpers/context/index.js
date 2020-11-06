@@ -7,13 +7,15 @@ export const appContext = createContext({
     closeDrawer: () => { },
     topbarIsVisible: true,
     setTopbar: () => { },
-    appLoading: true
+    appLoading: true,
+    changeAppBarTitle: (title) => {}
   },
   auth: { user: null, setAuthUser: () => {}, logoutUser: () => {} }
 })
 
 const AppContextProvider = (props) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
+  const [appBarTitle, setAppBarTitle] = useState(false)
   const [appLoading, setAppLoading] = useState(true)
   const [topbarIsVisible, setTopbarIsVisible] = useState(true)
   const [user, setUser] = useState()
@@ -27,6 +29,10 @@ const AppContextProvider = (props) => {
   }
   const closeDrawer = () => {
     setDrawerIsOpen(false)
+  }
+
+  const changeAppBarTitle = (title) => {
+    setAppBarTitle(title)
   }
 
   const setAuthUser = (user, { persist } = {}) => {
@@ -56,7 +62,9 @@ const AppContextProvider = (props) => {
         closeDrawer,
         topbarIsVisible,
         setTopbar,
-        appLoading
+        appLoading,
+        appBarTitle,
+        changeAppBarTitle
       },
       auth: { user, setAuthUser, logoutUser }
     }}>

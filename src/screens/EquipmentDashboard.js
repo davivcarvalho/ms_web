@@ -9,9 +9,8 @@ export default function EquipmentDashboard () {
   const { layout } = useContext(appContext)
   return (
     <>
-      <AppBarComponent withDrawer/>
+      <AppBarComponent withDrawer title={layout.appBarTitle}/>
       <DrawerComponent/>
-
       <BottomNavigationComponent />
     </>
   )

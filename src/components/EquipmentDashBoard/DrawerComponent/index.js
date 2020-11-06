@@ -24,7 +24,9 @@ export default function DrawerComponent () {
   const classes = useStyles()
   const { layout } = useContext(appContext)
 
-  const handleClick = () => {
+  const handleClick = (screen) => {
+    layout.changeAppBarTitle(screen)
+
     layout.toogleDrawer(true)
   }
 

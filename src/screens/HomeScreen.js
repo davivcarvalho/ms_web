@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
-    padding: 10
+    padding: 10,
+    marginTop: 67
   },
   image: {
     width: '17em'

@@ -6,7 +6,7 @@ import { appContext } from './helpers/context'
 import HomeScreen from './screens/HomeScreen'
 import LoadingComponent from './components/LoadingComponent'
 import RegisterScreen from './screens/RegisterScreen'
-import EquipmentDashboard from './screens/EquipmentDashboard'
+import EquipmentSelect from './screens/EquipmentSelect'
 
 function App () {
   const { auth, layout } = useContext(appContext)
@@ -28,7 +28,7 @@ function App () {
       <Fragment>
         <Switch>
           <Route path="/" exact component={HomeScreen} />
-          <Route path="/equipamentos" exact component={EquipmentDashboard} />
+          <Route path="/equipamentos" exact component={EquipmentSelect} />
           <Route path="/auth/login" component={LoginScreen} />
           <Route path="/auth/register" component={RegisterScreen} />
         </Switch>
