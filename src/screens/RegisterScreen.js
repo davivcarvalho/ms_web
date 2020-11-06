@@ -12,7 +12,7 @@ import Container from '@material-ui/core/Container'
 import { appContext } from '../helpers/context'
 import http from '../helpers/http'
 import { useHistory } from 'react-router-dom'
-import { CircularProgress, Snackbar } from '@material-ui/core'
+import { CircularProgress, MenuItem, Snackbar } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import clsx from 'clsx'
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(2)
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
@@ -59,29 +59,36 @@ export default function RegisterScreen () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [roleSelectValue, setRoleSelectValue] = useState('')
   const { auth } = useContext(appContext)
+  const name = useRef()
   const ac = useRef()
   const password = useRef()
-  const remember = useRef()
+  const passwordConfirm = useRef()
   const history = useHistory()
 
   const handleSubmitForm = (e) => {
     e.preventDefault()
     const data = {
+      name: name.current.value,
+      role: roleSelectValue,
       ac: ac.current.value,
       password: password.current.value
     }
     setLoading(true)
-    http.post('/auth/login', data)
+    http.post('/user', data)
       .then(response => {
         const { user } = response.data
-        if (!user) return
-        auth.setAuthUser(user, { persist: remember.current.checked })
-        setLoading(false)
+        if (!user) throw new Error('')
+
+        auth.setAuthUser(user)
+
         setSuccess(true)
+        setLoading(false)
+
         setTimeout(() => {
-          history.push('/')
-        }, 300)
+          history.replace('/')
+        }, 2500)
       })
       .catch(() => {
         setLoading(false)
@@ -93,7 +100,23 @@ export default function RegisterScreen () {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <img src='/aperam.png' className={classes.image}/>
+        <Typography variant="body2" color="textPrimary" align="center">
+          Insira os dados abaixo para criar um novo registro:
+        </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmitForm}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="name"
+            label="Nome"
+            name="name"
+            autoComplete="name"
+            autoFocus
+            inputRef={name}
+            disabled={loading}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -103,7 +126,8 @@ export default function RegisterScreen () {
             label="Registro"
             name="ac"
             autoComplete="ac"
-            autoFocus
+            helperText="Por favor insira seu registro ACxxxxx."
+
             inputRef={ac}
             disabled={loading}
           />
@@ -120,11 +144,42 @@ export default function RegisterScreen () {
             inputRef={password}
             disabled={loading}
           />
-          <FormControlLabel
-            control={<Checkbox color="primary" inputRef={remember} value="0"/>}
-            label="Lembrar-me"
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="passwordConfirm"
+            label="Confime sua Senha"
+            type="password"
+            id="passwordConfirm"
+            autoComplete="false"
+            inputRef={passwordConfirm}
             disabled={loading}
           />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            select
+            name="role"
+            label="Função"
+            helperText="Por favor selecione sua função no sistema."
+            id="role"
+            autoComplete="false"
+            disabled={loading}
+            value={roleSelectValue}
+            onChange={(event) => setRoleSelectValue(event.target.value)}
+          >
+            <MenuItem key={'operator'} value={'operator'}>
+              Operador
+            </MenuItem>
+            <MenuItem key={'maintenance'} value={'maintenance'}>
+              Mantenedor
+            </MenuItem>
+          </TextField>
+
           <Button
             type="submit"
             fullWidth
@@ -137,15 +192,6 @@ export default function RegisterScreen () {
 
             Registrar
           </Button>
-          <Grid container>
-            <Grid item xs>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                Cadastrar
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={8}>
@@ -153,8 +199,17 @@ export default function RegisterScreen () {
           Em desenvolvimento por: PACM
         </Typography>
       </Box>
-      <Snackbar open={error} onClose={() => setError(false)} autoHideDuration={3000} message="Falha na tentativa de Login. Verifique seu registro e senha e tente novamente!">
-      </Snackbar>
+      <Snackbar
+        open={error}
+        onClose={() => setError(false)}
+        autoHideDuration={3000}
+        message="Falha ao criar o usuario! Por favor revise os dados inseridos e tente novamente." />
+      <Snackbar
+        open={success}
+        onClose={() => setSuccess(false)}
+        autoHideDuration={3000}
+        message="Usuário criado com sucesso! Você
+        será redirecionado em instantes!" />
     </Container>
   )
 }

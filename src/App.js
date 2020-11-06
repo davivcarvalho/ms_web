@@ -11,16 +11,16 @@ function App () {
   const { auth, layout } = useContext(appContext)
   const history = useHistory()
 
-  useEffect(() => {
-    const userString = localStorage.getItem('user')
-    const user = JSON.parse(userString)
-    if (user) {
-      auth.setAuthUser(user, {})
-      return
-    }
+  // useEffect(() => {
+  //   const userString = localStorage.getItem('user')
+  //   const user = JSON.parse(userString)
+  //   if (user) {
+  //     auth.setAuthUser(user, {})
+  //     return
+  //   }
 
-    history.push('/auth/login')
-  }, [])
+  //   history.push('/auth/login')
+  // }, [])
 
   if (!layout.appLoading) {
     return (
