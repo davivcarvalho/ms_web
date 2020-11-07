@@ -9,7 +9,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function LoadingComponent () {
+export default function LoadingComponent ({
+  open = false
+}) {
   const classes = useStyles()
   const { layout } = useContext(appContext)
 
@@ -18,10 +20,10 @@ export default function LoadingComponent () {
     if (bootSpinner) {
       bootSpinner.remove()
     }
-  })
+  }, [])
 
   return (
-    <Backdrop className={classes.backdrop} open={layout.appLoading}>
+    <Backdrop className={classes.backdrop} open={layout.appLoading || open}>
       <div className="lds-root">
         <div className="lds-facebook">
           <div>
