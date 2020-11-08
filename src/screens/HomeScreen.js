@@ -5,6 +5,7 @@ import AppBarComponent from '../components/AppBarComponent'
 import BottomNavigationComponent from '../components/BottomNavigationComponent'
 import { Grid, Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import { TransitionWrapper } from '../helpers/theme/transitions'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -26,14 +27,12 @@ export default function HomeScreen () {
   const classes = useStyles()
 
   return (
-    <Fragment>
-      <AppBarComponent/>
+    <TransitionWrapper>
       <Grid
         className={classes.pageContainer}
         container
         direction="column"
       >
-
         <Grid item>
           <Typography variant="h5" className={classes.title} >
             Aplicativo Manutenção
@@ -51,7 +50,6 @@ export default function HomeScreen () {
         </Grid>
       </Grid>
 
-      <BottomNavigationComponent/>
-    </Fragment>
+    </TransitionWrapper>
   )
 }

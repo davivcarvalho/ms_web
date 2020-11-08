@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom'
 import { CircularProgress, Snackbar } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import clsx from 'clsx'
+import { TransitionWrapper } from '../helpers/theme/transitions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,11 +60,20 @@ export default function LoginScreen () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
-  const { auth } = useContext(appContext)
+  const { auth, layout } = useContext(appContext)
   const ac = useRef()
   const password = useRef()
   const remember = useRef()
   const history = useHistory()
+
+  useEffect(() => {
+    layout.setTopbar(false)
+    layout.setBottomBar(false)
+    return () => {
+      layout.setTopbar(true)
+      layout.setBottomBar(true)
+    }
+  }, [])
 
   const handleSubmitForm = (e) => {
     e.preventDefault()
@@ -90,71 +100,73 @@ export default function LoginScreen () {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <img src='/aperam.png' className={classes.image}/>
-        <form className={classes.form} noValidate onSubmit={handleSubmitForm}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="ac"
-            label="Registro"
-            name="ac"
-            autoComplete="ac"
-            autoFocus
-            inputRef={ac}
-            disabled={loading}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            inputRef={password}
-            disabled={loading}
-          />
-          <FormControlLabel
-            control={<Checkbox color="primary" inputRef={remember} value="0"/>}
-            label="Lembrar-me"
-            disabled={loading}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={loading}
-            className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
-          >
-            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+    <TransitionWrapper >
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <img src='/aperam.png' className={classes.image}/>
+          <form className={classes.form} noValidate onSubmit={handleSubmitForm}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="ac"
+              label="Registro"
+              name="ac"
+              autoComplete="ac"
+              autoFocus
+              inputRef={ac}
+              disabled={loading}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              inputRef={password}
+              disabled={loading}
+            />
+            <FormControlLabel
+              control={<Checkbox color="primary" inputRef={remember} value="0"/>}
+              label="Lembrar-me"
+              disabled={loading}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
+            >
+              {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
             Entrar
-          </Button>
-          <Grid container>
-            <Grid item xs>
-            </Grid>
-            <Grid item>
-              <Link href="#" onClick={() => history.push('/auth/register')} variant="body2">
+            </Button>
+            <Grid container>
+              <Grid item xs>
+              </Grid>
+              <Grid item>
+                <Link href="#" onClick={() => history.push('/auth/register')} variant="body2">
                 Cadastrar
-              </Link>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Typography variant="body2" color="textSecondary" align="center">
+          </form>
+        </div>
+        <Box mt={8}>
+          <Typography variant="body2" color="textSecondary" align="center">
           Em desenvolvimento por: PACM
-        </Typography>
-      </Box>
-      <Snackbar open={error} onClose={() => setError(false)} autoHideDuration={3000} message="Falha na tentativa de Login. Verifique seu registro e senha e tente novamente!">
-      </Snackbar>
-    </Container>
+          </Typography>
+        </Box>
+        <Snackbar open={error} onClose={() => setError(false)} autoHideDuration={3000} message="Falha na tentativa de Login. Verifique seu registro e senha e tente novamente!">
+        </Snackbar>
+      </Container>
+    </TransitionWrapper>
   )
 }

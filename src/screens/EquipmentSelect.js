@@ -7,6 +7,7 @@ import LoadingComponent from '../components/LoadingComponent'
 
 import http from '../helpers/http'
 import ActionsComponent from '../components/EquipmentDashBoard/ActionsComponent'
+import { TransitionWrapper } from '../helpers/theme/transitions'
 
 const useStyles = makeStyles({
   table: {
@@ -44,8 +45,7 @@ export default function EquipmentSelect () {
   }, [])
 
   return (
-    <>
-      <AppBarComponent title="Equipamentos"/>
+    <TransitionWrapper>
       <Grid container className={classes.pageContainer}>
         <Grid item>
           <TableContainer component={Paper}>
@@ -85,10 +85,9 @@ export default function EquipmentSelect () {
           </TableContainer>
         </Grid>
       </Grid>
-      <BottomNavigationComponent />
       <LoadingComponent open={loading}/>
       <Snackbar open={error} onClose={() => setError(null)} autoHideDuration={3000} message={error && error.message} />
 
-    </>
+    </TransitionWrapper>
   )
 }

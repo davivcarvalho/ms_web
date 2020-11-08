@@ -65,6 +65,8 @@ export default function AppBarComponent ({
     layout.toogleDrawer()
   }
 
+  if (!layout.topbarIsVisible) return null
+
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>

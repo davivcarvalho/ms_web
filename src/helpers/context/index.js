@@ -8,7 +8,8 @@ export const appContext = createContext({
     topbarIsVisible: true,
     setTopbar: () => { },
     appLoading: true,
-    changeAppBarTitle: (title) => {}
+    changeAppBarTitle: (title) => {},
+    bottomNavigationIsVisible: true
   },
   auth: { user: null, setAuthUser: () => {}, logoutUser: () => {} }
 })
@@ -18,6 +19,7 @@ const AppContextProvider = (props) => {
   const [appBarTitle, setAppBarTitle] = useState(false)
   const [appLoading, setAppLoading] = useState(true)
   const [topbarIsVisible, setTopbarIsVisible] = useState(true)
+  const [bottomNavigationIsVisible, setNavigationIsVisible] = useState(true)
   const [user, setUser] = useState()
 
   const toogleDrawer = (forceClose) => {
@@ -49,11 +51,13 @@ const AppContextProvider = (props) => {
   const setTopbar = (state = true) => {
     setTopbarIsVisible(state)
   }
+  const setBottomBar = (state = true) => {
+    setNavigationIsVisible(state)
+  }
 
   useEffect(() => {
     setAppLoading(false)
   })
-
   return (
     <appContext.Provider value={{
       layout: {
@@ -64,7 +68,9 @@ const AppContextProvider = (props) => {
         setTopbar,
         appLoading,
         appBarTitle,
-        changeAppBarTitle
+        changeAppBarTitle,
+        setBottomBar,
+        bottomNavigationIsVisible
       },
       auth: { user, setAuthUser, logoutUser }
     }}>

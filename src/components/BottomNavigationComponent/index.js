@@ -1,7 +1,8 @@
 import { BottomNavigation, BottomNavigationAction, makeStyles } from '@material-ui/core'
 import { Build, Home, Settings } from '@material-ui/icons'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { appContext } from '../../helpers/context'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BottomNavigationComponent () {
   const classes = useStyles()
+  const { layout } = useContext(appContext)
   const [value, setValue] = useState(0)
   const router = useHistory()
 
@@ -24,6 +26,7 @@ export default function BottomNavigationComponent () {
     if (location.pathname.includes('/solicitacoes')) setValue(2)
   }, [])
 
+  if (!layout.bottomNavigationIsVisible) return null
   return (
     <BottomNavigation
       value={value}

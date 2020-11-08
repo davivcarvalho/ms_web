@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom'
 import { CircularProgress, MenuItem, Snackbar } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import clsx from 'clsx'
+import { TransitionWrapper } from '../helpers/theme/transitions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -61,12 +62,21 @@ export default function RegisterScreen () {
   const [success, setSuccess] = useState(false)
   const [formError, setFormError] = useState()
   const [roleSelectValue, setRoleSelectValue] = useState('')
-  const { auth } = useContext(appContext)
+  const { auth, layout } = useContext(appContext)
   const name = useRef()
   const ac = useRef()
   const password = useRef()
   const passwordConfirm = useRef()
   const history = useHistory()
+
+  useEffect(() => {
+    layout.setTopbar(false)
+    layout.setBottomBar(false)
+    return () => {
+      layout.setTopbar(true)
+      layout.setBottomBar(true)
+    }
+  }, [])
 
   const handleSubmitForm = (e) => {
     e.preventDefault()
@@ -112,128 +122,130 @@ export default function RegisterScreen () {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <img src='/aperam.png' className={classes.image}/>
-        <Typography variant="body2" color="textPrimary" align="center">
+    <TransitionWrapper>
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <img src='/aperam.png' className={classes.image}/>
+          <Typography variant="body2" color="textPrimary" align="center">
           Insira os dados abaixo para criar um novo registro:
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmitForm}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Nome"
-            name="name"
-            autoComplete="name"
-            autoFocus
-            inputRef={name}
-            disabled={loading}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="ac"
-            label="Registro"
-            name="ac"
-            autoComplete="ac"
-            helperText="Por favor insira seu registro ACxxxxx."
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleSubmitForm}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Nome"
+              name="name"
+              autoComplete="name"
+              autoFocus
+              inputRef={name}
+              disabled={loading}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="ac"
+              label="Registro"
+              name="ac"
+              autoComplete="ac"
+              helperText="Por favor insira seu registro ACxxxxx."
 
-            inputRef={ac}
-            disabled={loading}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            inputRef={password}
-            disabled={loading}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="passwordConfirm"
-            label="Confime sua Senha"
-            type="password"
-            id="passwordConfirm"
-            autoComplete="false"
-            inputRef={passwordConfirm}
-            disabled={loading}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            select
-            name="role"
-            label="Função"
-            helperText="Por favor selecione sua função no sistema."
-            id="role"
-            autoComplete="false"
-            disabled={loading}
-            value={roleSelectValue}
-            onChange={(event) => setRoleSelectValue(event.target.value)}
-          >
-            <MenuItem key={'operator'} value={'operator'}>
+              inputRef={ac}
+              disabled={loading}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              inputRef={password}
+              disabled={loading}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="passwordConfirm"
+              label="Confime sua Senha"
+              type="password"
+              id="passwordConfirm"
+              autoComplete="false"
+              inputRef={passwordConfirm}
+              disabled={loading}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              select
+              name="role"
+              label="Função"
+              helperText="Por favor selecione sua função no sistema."
+              id="role"
+              autoComplete="false"
+              disabled={loading}
+              value={roleSelectValue}
+              onChange={(event) => setRoleSelectValue(event.target.value)}
+            >
+              <MenuItem key={'operator'} value={'operator'}>
               Operador
-            </MenuItem>
-            <MenuItem key={'maintenance'} value={'maintenance'}>
+              </MenuItem>
+              <MenuItem key={'maintenance'} value={'maintenance'}>
               Mantenedor
-            </MenuItem>
-          </TextField>
+              </MenuItem>
+            </TextField>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={loading || success}
-            className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
-          >
-            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={loading || success}
+              className={clsx(classes.submit, { [classes.buttonSuccess]: success })}
+            >
+              {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
             Registrar
-          </Button>
-        </form>
-      </div>
-      <Grid container>
-        <Grid item xs>
-        </Grid>
-        <Grid item>
-          <Link href="#" onClick={() => history.push('/auth/login')} variant="body2">
+            </Button>
+          </form>
+        </div>
+        <Grid container>
+          <Grid item xs>
+          </Grid>
+          <Grid item>
+            <Link href="#" onClick={() => history.push('/auth/login')} variant="body2">
           Voltar para o Login
-          </Link>
+            </Link>
+          </Grid>
         </Grid>
-      </Grid>
-      <Box mt={8}>
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Box mt={8}>
+          <Typography variant="body2" color="textSecondary" align="center">
           Em desenvolvimento por: PACM
-        </Typography>
-      </Box>
-      <Snackbar
-        open={error}
-        onClose={() => setError(false)}
-        autoHideDuration={3000}
-        message="Falha ao criar o usuario! Por favor revise os dados inseridos e tente novamente." />
-      <Snackbar
-        open={success}
-        onClose={() => setSuccess(false)}
-        autoHideDuration={3000}
-        message="Usuário criado com sucesso! Você
+          </Typography>
+        </Box>
+        <Snackbar
+          open={error}
+          onClose={() => setError(false)}
+          autoHideDuration={3000}
+          message="Falha ao criar o usuario! Por favor revise os dados inseridos e tente novamente." />
+        <Snackbar
+          open={success}
+          onClose={() => setSuccess(false)}
+          autoHideDuration={3000}
+          message="Usuário criado com sucesso! Você
         será redirecionado em instantes!" />
-    </Container>
+      </Container>
+    </TransitionWrapper>
   )
 }
