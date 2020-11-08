@@ -45,7 +45,7 @@ export default function EquipmentSelect () {
 
   return (
     <>
-      <AppBarComponent title="Equipamento"/>
+      <AppBarComponent title="Equipamentos"/>
       <Grid container className={classes.pageContainer}>
         <Grid item>
           <TableContainer component={Paper}>
@@ -75,7 +75,7 @@ export default function EquipmentSelect () {
               <TableFooter >
                 <TableRow className={classes.tableFooter}>
                   <TableCell align="left">
-                    <Button variant="outlined" color="primary">
+                    <Button variant="contained" color="primary">
                       Novo
                     </Button>
                   </TableCell>
