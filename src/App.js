@@ -10,17 +10,10 @@ import EquipmentSelect from './screens/EquipmentSelect'
 import { AnimatePresence } from 'framer-motion'
 import BottomNavigationComponent from './components/BottomNavigationComponent'
 import AppBarComponent from './components/AppBarComponent'
-
-const routes = [
-  { path: '/', component: HomeScreen, exact: true },
-  { path: '/equipamentos', component: EquipmentSelect, exact: true },
-  { path: '/auth/login', component: LoginScreen },
-  { path: '/auth/register', component: RegisterScreen }
-]
+import { AppLayout } from './helpers/theme'
 
 function App () {
   const { auth, layout } = useContext(appContext)
-  const location = useLocation()
 
   // useEffect(() => {
   //   const userString = localStorage.getItem('user')
@@ -36,18 +29,17 @@ function App () {
   if (!layout.appLoading) {
     return (
       <Fragment>
-        <AppBarComponent/>
-        <AnimatePresence >
-          <Switch>
-            <Route path="/" exact component={HomeScreen} />
-            <Route path="/equipamentos" exact component={EquipmentSelect} />
-            <Route path="/auth/login" component={LoginScreen} />
-            <Route path="/auth/register" component={RegisterScreen} />
-          </Switch>
-          <LoadingComponent />
-        </AnimatePresence>
-        <BottomNavigationComponent />
-
+        <Route render={({ location }) => (
+          <AnimatePresence exitBeforeEnter >
+            <Switch location={location} key={location.pathname}>
+              <Route path="/" exact><AppLayout><HomeScreen /></AppLayout></Route>
+              <Route path="/equipamentos" exact><AppLayout><EquipmentSelect /></AppLayout></Route>
+              <Route path="/auth/login" component={LoginScreen} />
+              <Route path="/auth/register" component={RegisterScreen} />
+            </Switch>
+          </AnimatePresence>
+        )} />
+        <LoadingComponent />
       </Fragment>
     )
   }

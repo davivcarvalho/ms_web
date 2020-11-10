@@ -1,4 +1,7 @@
+import React from 'react'
 import { createMuiTheme } from '@material-ui/core'
+import AppBarComponent from '../../components/AppBarComponent'
+import BottomNavigationComponent from '../../components/BottomNavigationComponent'
 
 export const theme = createMuiTheme({
   palette: {
@@ -7,3 +10,11 @@ export const theme = createMuiTheme({
     }
   }
 })
+
+export const AppLayout = ({ children }) => (
+  <>
+    <AppBarComponent/>
+    { children }
+    <BottomNavigationComponent />
+  </>
+)
