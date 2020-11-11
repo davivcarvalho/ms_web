@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Typography } from '@material-ui/core'
 import { EquipmentsTableRow } from './EquipmentsTableRow'
+import { Create, Edit } from '@material-ui/icons'
 
 export default function EquipmentsTable ({
   equipments
@@ -22,8 +23,8 @@ export default function EquipmentsTable ({
           <TableRow>
             <TableCell />
             <TableCell>Nome</TableCell>
-            <TableCell >TAG</TableCell>
-            <TableCell >Descrição</TableCell>
+            <TableCell>TAG</TableCell>
+            <TableCell>Descrição</TableCell>
             <TableCell align="right">Ações</TableCell>
           </TableRow>
         </TableHead>
@@ -32,7 +33,10 @@ export default function EquipmentsTable ({
             <EquipmentsTableRow key={equipment.id} equipment={equipment}/>
           ))}
         </TableBody>
+
       </Table>
+      <Button color="primary" variant="contained" style={{ marginTop: 20 }}>CADASTRAR</Button>
+
     </TableContainer>
   )
 }

@@ -8,6 +8,7 @@ import LoadingComponent from '../components/LoadingComponent'
 import http from '../helpers/http'
 import { TransitionWrapper } from '../helpers/theme/transitions'
 import EquipmentsTable from '../components/EquipmentSelect/EquipmentsTable'
+import { Edit } from '@material-ui/icons'
 
 const useStyles = makeStyles({
   table: {
@@ -33,22 +34,23 @@ export default function EquipmentSelect () {
     http.get('/equipments')
       .then(response => {
         const { equipments } = response.data
-        setLoading(false)
         if (!equipments) return
 
-        const extractedEquipments = equipments.map(equipment => {
+        const extractedEquipments = equipments.flatMap(equipment => {
           const childrens = []
+          const newEquipment = { ...equipment }
 
           equipments.forEach(item => {
-            if (item.parent && item.parent.id === equipment.id) childrens.push(item)
+            if (item.parent && item.parent.id === newEquipment.id) childrens.push(item)
           })
 
-          if (childrens.length > 0) equipment.childrens = childrens
-          return equipment
+          if (childrens.length > 0) newEquipment.childrens = childrens
+          if (newEquipment.parent) return []
+          return [newEquipment]
         })
-        console.log(extractedEquipments)
+        setLoading(false)
 
-        setEquipments(equipments)
+        setEquipments(extractedEquipments)
       })
       .catch(error => {
         setError(error)
@@ -58,8 +60,8 @@ export default function EquipmentSelect () {
 
   return (
     <TransitionWrapper>
-      <Grid container alignItems="center" className={classes.pageContainer}>
-        <Grid item md={12} xs={12}>
+      <Grid container justify="center" className={classes.pageContainer}>
+        <Grid item md={11} lg={10} >
           <EquipmentsTable equipments={equipments}/>
         </Grid>
       </Grid>
