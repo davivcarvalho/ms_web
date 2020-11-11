@@ -9,6 +9,7 @@ import http from '../helpers/http'
 import { TransitionWrapper } from '../helpers/theme/transitions'
 import EquipmentsTable from '../components/EquipmentSelect/EquipmentsTable'
 import { Edit } from '@material-ui/icons'
+import EquipmentCreateModal from '../components/EquipmentSelect/EquipmentCreateModal'
 
 const useStyles = makeStyles({
   table: {
@@ -29,6 +30,11 @@ export default function EquipmentSelect () {
   const [equipments, setEquipments] = useState()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
+  const [openCreateModal, setOpenCreateModal] = useState(false)
+
+  const onCreateClick = () => {
+    setOpenCreateModal(true)
+  }
 
   useEffect(() => {
     http.get('/equipments')
@@ -62,9 +68,10 @@ export default function EquipmentSelect () {
     <TransitionWrapper>
       <Grid container justify="center" className={classes.pageContainer}>
         <Grid item md={11} lg={10} >
-          <EquipmentsTable equipments={equipments}/>
+          <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} />
         </Grid>
       </Grid>
+      <EquipmentCreateModal open={openCreateModal} handleClose={() => setOpenCreateModal(false)}/>
       <LoadingComponent open={loading}/>
       <Snackbar open={error} onClose={() => setError(null)} autoHideDuration={3000} message={error && error.message} />
 

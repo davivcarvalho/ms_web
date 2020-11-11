@@ -4,7 +4,8 @@ import { EquipmentsTableRow } from './EquipmentsTableRow'
 import { Create, Edit } from '@material-ui/icons'
 
 export default function EquipmentsTable ({
-  equipments
+  equipments,
+  handleCreateButton = () => {}
 }) {
   if (!equipments) {
     return (
@@ -35,7 +36,12 @@ export default function EquipmentsTable ({
         </TableBody>
 
       </Table>
-      <Button color="primary" variant="contained" style={{ marginTop: 20 }}>CADASTRAR</Button>
+      <Button
+        color="primary"
+        variant="contained"
+        style={{ marginTop: 20 }}
+        onClick={handleCreateButton}
+      >CADASTRAR</Button>
 
     </TableContainer>
   )
