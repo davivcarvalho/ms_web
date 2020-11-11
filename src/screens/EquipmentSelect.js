@@ -35,8 +35,7 @@ export default function EquipmentSelect () {
   const onCreateClick = () => {
     setOpenCreateModal(true)
   }
-
-  useEffect(() => {
+  const loadEquipments = () => {
     http.get('/equipments')
       .then(response => {
         const { equipments } = response.data
@@ -62,16 +61,30 @@ export default function EquipmentSelect () {
         setError(error)
         setLoading(false)
       })
+  }
+  useEffect(() => {
+    loadEquipments()
   }, [])
 
+  const onModalClose = (success) => {
+    setOpenCreateModal(false)
+    if (success) loadEquipments()
+  }
+
+  const handleEquipmentEdit = (id) => {
+    console.log(id)
+  }
+  const handleEquipmentDelete = (id) => {
+    console.log(id)
+  }
   return (
     <TransitionWrapper>
       <Grid container justify="center" className={classes.pageContainer}>
         <Grid item md={11} lg={10} >
-          <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} />
+          <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} onEdit={handleEquipmentEdit} onDelete={handleEquipmentEdit}/>
         </Grid>
       </Grid>
-      <EquipmentCreateModal open={openCreateModal} handleClose={() => setOpenCreateModal(false)}/>
+      <EquipmentCreateModal open={openCreateModal} handleClose={onModalClose}/>
       <LoadingComponent open={loading}/>
       <Snackbar open={error} onClose={() => setError(null)} autoHideDuration={3000} message={error && error.message} />
 

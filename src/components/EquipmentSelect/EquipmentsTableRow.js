@@ -14,7 +14,9 @@ const useRowStyles = makeStyles({
 })
 
 const SubEquipmentsTableRow = ({
-  equipment = {}
+  equipment = {},
+  onDelete = () => {},
+  onEdit = () => {}
 }) => (
   <Table size="small" style={{ marginBottom: 25 }}>
     <TableHead>
@@ -32,14 +34,16 @@ const SubEquipmentsTableRow = ({
         <TableCell>{ equipment.name }</TableCell>
         <TableCell>{ equipment.label }</TableCell>
         <TableCell>{ equipment.description }</TableCell>
-        <TableCell align="right"><EquipmentTableActions /></TableCell>
+        <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={() => onEdit(equipment.id)}/></TableCell>
       </TableRow>
     </TableBody>
   </Table>
 )
 
 export function EquipmentsTableRow ({
-  equipment = {}
+  equipment = {},
+  onDelete = () => {},
+  onEdit = () => {}
 }) {
   const [open, setOpen] = React.useState(false)
   const classes = useRowStyles()
@@ -61,14 +65,14 @@ export function EquipmentsTableRow ({
         </TableCell>
         <TableCell >{equipment.label}</TableCell>
         <TableCell >{equipment.description}</TableCell>
-        <TableCell align="right"><EquipmentTableActions /></TableCell>
+        <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={() => onEdit(equipment.id)}/></TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               { equipment.childrens && equipment.childrens.map(equipment =>
-                <SubEquipmentsTableRow key={equipment.id} equipment={equipment} />
+                <SubEquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit} />
               )}
 
             </Box>

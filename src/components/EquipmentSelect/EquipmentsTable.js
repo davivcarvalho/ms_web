@@ -5,9 +5,11 @@ import { Create, Edit } from '@material-ui/icons'
 
 export default function EquipmentsTable ({
   equipments,
-  handleCreateButton = () => {}
+  handleCreateButton = () => {},
+  onDelete = () => {},
+  onEdit = () => {}
 }) {
-  if (!equipments) {
+  if (!equipments || equipments.length === 0) {
     return (
       <Paper style={{ padding: 20 }}>
         <Typography variant="body1">
@@ -31,7 +33,7 @@ export default function EquipmentsTable ({
         </TableHead>
         <TableBody>
           { equipments.map(equipment => (
-            <EquipmentsTableRow key={equipment.id} equipment={equipment}/>
+            <EquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit}/>
           ))}
         </TableBody>
 
