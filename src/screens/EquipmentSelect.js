@@ -6,8 +6,8 @@ import Paper from '@material-ui/core/Paper'
 import LoadingComponent from '../components/LoadingComponent'
 
 import http from '../helpers/http'
-import ActionsComponent from '../components/EquipmentDashBoard/ActionsComponent'
 import { TransitionWrapper } from '../helpers/theme/transitions'
+import EquipmentsTable from '../components/EquipmentSelect/EquipmentsTable'
 
 const useStyles = makeStyles({
   table: {
@@ -15,7 +15,8 @@ const useStyles = makeStyles({
   },
   pageContainer: {
     marginTop: 90,
-    paddingLeft: 20
+    // marginLeft: 20,
+    marginRight: 20
   },
   tableFooter: {
     padding: 20
@@ -28,14 +29,25 @@ export default function EquipmentSelect () {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
 
-  const rows = []
-
   useEffect(() => {
     http.get('/equipments')
       .then(response => {
         const { equipments } = response.data
         setLoading(false)
         if (!equipments) return
+
+        const extractedEquipments = equipments.map(equipment => {
+          const childrens = []
+
+          equipments.forEach(item => {
+            if (item.parent && item.parent.id === equipment.id) childrens.push(item)
+          })
+
+          if (childrens.length > 0) equipment.childrens = childrens
+          return equipment
+        })
+        console.log(extractedEquipments)
+
         setEquipments(equipments)
       })
       .catch(error => {
@@ -46,43 +58,9 @@ export default function EquipmentSelect () {
 
   return (
     <TransitionWrapper>
-      <Grid container className={classes.pageContainer}>
-        <Grid item>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nome</TableCell>
-                  <TableCell>TAG</TableCell>
-                  <TableCell>Descrição</TableCell>
-                  <TableCell align="right">Ações</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {equipments && equipments.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.label}</TableCell>
-                    <TableCell>{row.description}</TableCell>
-                    <TableCell align="right">
-                      <ActionsComponent />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter >
-                <TableRow className={classes.tableFooter}>
-                  <TableCell align="left">
-                    <Button variant="contained" color="primary">
-                      Novo
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
+      <Grid container alignItems="center" className={classes.pageContainer}>
+        <Grid item md={12} xs={12}>
+          <EquipmentsTable equipments={equipments}/>
         </Grid>
       </Grid>
       <LoadingComponent open={loading}/>
