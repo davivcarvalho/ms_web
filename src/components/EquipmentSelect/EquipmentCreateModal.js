@@ -45,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EquipmentCreateModal ({
   open,
-  handleClose
+  handleClose,
+  edit
 }) {
   const classes = useStyles()
   const [loading, setLoading] = useState(false)
@@ -56,6 +57,14 @@ export default function EquipmentCreateModal ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (edit) {
+      editAction()
+      return
+    }
+    createAction()
+  }
+
+  const createAction = () => {
     const data = {
       name: name.current.value,
       label: label.current.value,
@@ -65,7 +74,24 @@ export default function EquipmentCreateModal ({
     http.post('/equipment', data)
       .then(response => {
         setLoading(false)
-        setSuccess(true)
+        handleClose(true)
+      })
+      .catch(error => {
+        setLoading(false)
+        console.log(error)
+      })
+  }
+
+  const editAction = () => {
+    const data = {
+      name: name.current.value,
+      label: label.current.value,
+      description: description.current.value
+    }
+    setLoading(true)
+    http.post(`/equipment/${edit.id}`, data)
+      .then(response => {
+        setLoading(false)
         handleClose(true)
       })
       .catch(error => {
@@ -83,8 +109,14 @@ export default function EquipmentCreateModal ({
       className={classes.modal}
     >
       <Paper elevation={5} className={classes.paper}>
-        <Typography variant="h6"> CRIAR NOVO EQUIPAMENTO </Typography>
-        <Typography variant="subtitle1"> Insira os dados abaixo para criar um novo equipamento. </Typography>
+        <Typography variant="h6">
+          {
+            edit
+              ? `Editar equipamento ${edit.name}`
+              : 'Criar novo equipamento'
+          }
+        </Typography>
+        { edit && (<Typography variant="subtitle1"> Insira os dados abaixo para criar um novo equipamento. </Typography>) }
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
@@ -93,6 +125,7 @@ export default function EquipmentCreateModal ({
             id="name"
             label="Nome"
             name="name"
+            defaultValue={edit && edit.name}
             autoComplete="name"
             inputRef={name}
             autoFocus
@@ -105,6 +138,7 @@ export default function EquipmentCreateModal ({
             id="label"
             label="TAG"
             name="label"
+            defaultValue={edit && edit.label}
             autoComplete="label"
             inputRef={label}
             disabled={loading}
@@ -116,6 +150,7 @@ export default function EquipmentCreateModal ({
             fullWidth
             id="description"
             label="Descrição"
+            defaultValue={edit && edit.description}
             name="description"
             autoComplete="name"
             inputRef={description}

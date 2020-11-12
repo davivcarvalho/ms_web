@@ -30,6 +30,7 @@ export default function EquipmentSelect () {
   const [equipments, setEquipments] = useState()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
+  const [edit, setEdit] = useState()
   const [openCreateModal, setOpenCreateModal] = useState(false)
 
   const onCreateClick = () => {
@@ -68,11 +69,16 @@ export default function EquipmentSelect () {
 
   const onModalClose = (success) => {
     setOpenCreateModal(false)
+    setEdit()
     if (success) loadEquipments()
   }
 
   const handleEquipmentEdit = (id) => {
-    console.log(id)
+    const equipmentForEdition = equipments.find(e => e.id === id)
+    if (!equipmentForEdition) return
+
+    setEdit(equipmentForEdition)
+    setOpenCreateModal(true)
   }
   const handleEquipmentDelete = (id) => {
     console.log(id)
@@ -84,7 +90,7 @@ export default function EquipmentSelect () {
           <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} onEdit={handleEquipmentEdit} onDelete={handleEquipmentEdit}/>
         </Grid>
       </Grid>
-      <EquipmentCreateModal open={openCreateModal} handleClose={onModalClose}/>
+      <EquipmentCreateModal open={openCreateModal} handleClose={onModalClose} edit={edit}/>
       <LoadingComponent open={loading}/>
       <Snackbar open={error} onClose={() => setError(null)} autoHideDuration={3000} message={error && error.message} />
 

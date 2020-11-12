@@ -15,6 +15,12 @@ export default function EquipmentsTable ({
         <Typography variant="body1">
           Nenhum equipamento cadastrado!
         </Typography>
+        <Button
+          color="primary"
+          variant="contained"
+          style={{ marginTop: 20 }}
+          onClick={handleCreateButton}
+        >CADASTRAR</Button>
       </Paper>
     )
   }
