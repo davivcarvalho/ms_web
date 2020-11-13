@@ -18,26 +18,15 @@ const SubEquipmentsTableRow = ({
   onDelete = () => {},
   onEdit = () => {}
 }) => (
-  <Table size="small" style={{ marginBottom: 25 }}>
-    <TableHead>
-      <TableRow>
-        <TableCell></TableCell>
-        <TableCell>Nome</TableCell>
-        <TableCell>TAG</TableCell>
-        <TableCell>Descrição</TableCell>
-        <TableCell align="right">Ações</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      <TableRow >
-        <TableCell></TableCell>
-        <TableCell>{ equipment.name }</TableCell>
-        <TableCell>{ equipment.label }</TableCell>
-        <TableCell>{ equipment.description }</TableCell>
-        <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={() => onEdit(equipment.id)}/></TableCell>
-      </TableRow>
-    </TableBody>
-  </Table>
+
+  <TableRow >
+    <TableCell></TableCell>
+    <TableCell>{ equipment.name }</TableCell>
+    <TableCell>{ equipment.label }</TableCell>
+    <TableCell>{ equipment.description }</TableCell>
+    <TableCell align="right"><EquipmentTableActions subEquipment onDelete={() => onDelete(equipment.id)} onEdit={(child) => onEdit(equipment.id, child)}/></TableCell>
+  </TableRow>
+
 )
 
 export function EquipmentsTableRow ({
@@ -65,15 +54,30 @@ export function EquipmentsTableRow ({
         </TableCell>
         <TableCell >{equipment.label}</TableCell>
         <TableCell >{equipment.description}</TableCell>
-        <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={() => onEdit(equipment.id)}/></TableCell>
+        <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={(child) => onEdit(equipment.id, child)}/></TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              { equipment.childrens && equipment.childrens.map(equipment =>
-                <SubEquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit} />
-              )}
+              <Table size="small" style={{ marginBottom: 25 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell>Nome</TableCell>
+                    <TableCell>TAG</TableCell>
+                    <TableCell>Descrição</TableCell>
+                    <TableCell align="right">Ações</TableCell>
+                  </TableRow>
+                </TableHead>
+                { equipment.childrens && equipment.childrens.map(equipment => (
+
+                  <SubEquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit} />
+
+                ))}
+                <TableBody>
+                </TableBody>
+              </Table>
 
             </Box>
           </Collapse>

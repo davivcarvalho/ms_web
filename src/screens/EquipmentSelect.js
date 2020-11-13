@@ -10,6 +10,7 @@ import { TransitionWrapper } from '../helpers/theme/transitions'
 import EquipmentsTable from '../components/EquipmentSelect/EquipmentsTable'
 import { Edit } from '@material-ui/icons'
 import EquipmentCreateModal from '../components/EquipmentSelect/EquipmentCreateModal'
+import EquipmentDeleteModal from '../components/EquipmentSelect/EquipmentDeleteModal'
 
 const useStyles = makeStyles({
   table: {
@@ -28,9 +29,12 @@ const useStyles = makeStyles({
 export default function EquipmentSelect () {
   const classes = useStyles()
   const [equipments, setEquipments] = useState()
+  const [data, setData] = useState()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const [edit, setEdit] = useState()
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [equipmentDelete, setEquipmentDelete] = useState()
   const [openCreateModal, setOpenCreateModal] = useState(false)
 
   const onCreateClick = () => {
@@ -41,7 +45,7 @@ export default function EquipmentSelect () {
       .then(response => {
         const { equipments } = response.data
         if (!equipments) return
-
+        setData(equipments)
         const extractedEquipments = equipments.flatMap(equipment => {
           const childrens = []
           const newEquipment = { ...equipment }
@@ -73,24 +77,52 @@ export default function EquipmentSelect () {
     if (success) loadEquipments()
   }
 
-  const handleEquipmentEdit = (id) => {
-    const equipmentForEdition = equipments.find(e => e.id === id)
-    if (!equipmentForEdition) return
-
+  const handleEquipmentEdit = (id, child) => {
+    const result = data.find(e => e.id === id)
+    if (!result) return
+    const equipmentForEdition = { ...result }
+    if (child === true) equipmentForEdition.forParent = true
     setEdit(equipmentForEdition)
     setOpenCreateModal(true)
   }
   const handleEquipmentDelete = (id) => {
     console.log(id)
+    const equipmentForDelete = data.find(e => e.id === id)
+    if (!equipmentForDelete) return
+    setEquipmentDelete(equipmentForDelete)
+    setDeleteModal(true)
+  }
+
+  const onDeleteClose = (id) => {
+    if (!id) {
+      setDeleteModal(false)
+      setEquipmentDelete()
+      return
+    }
+    setLoading(true)
+    http.delete(`/equipment/${id}`)
+      .then(response => {
+        setLoading(false)
+        setDeleteModal(false)
+        setEquipmentDelete()
+        loadEquipments()
+      })
+      .catch(error => {
+        console.log(error)
+        setLoading(false)
+        setDeleteModal(false)
+        setEquipmentDelete()
+      })
   }
   return (
     <TransitionWrapper>
       <Grid container justify="center" className={classes.pageContainer}>
-        <Grid item md={11} lg={10} >
-          <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} onEdit={handleEquipmentEdit} onDelete={handleEquipmentEdit}/>
+        <Grid item md={11} lg={10} xl={10} sm={11} >
+          <EquipmentsTable equipments={equipments} handleCreateButton={onCreateClick} onEdit={handleEquipmentEdit} onDelete={handleEquipmentDelete}/>
         </Grid>
       </Grid>
       <EquipmentCreateModal open={openCreateModal} handleClose={onModalClose} edit={edit}/>
+      <EquipmentDeleteModal open={deleteModal} handleClose={onDeleteClose} equipment={equipmentDelete} />
       <LoadingComponent open={loading}/>
       <Snackbar open={error} onClose={() => setError(null)} autoHideDuration={3000} message={error && error.message} />
 

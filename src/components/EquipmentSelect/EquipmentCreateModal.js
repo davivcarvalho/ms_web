@@ -57,7 +57,7 @@ export default function EquipmentCreateModal ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (edit) {
+    if (edit && !edit.forParent) {
       editAction()
       return
     }
@@ -70,6 +70,9 @@ export default function EquipmentCreateModal ({
       label: label.current.value,
       description: description.current.value
     }
+    if (edit && edit.forParent) data.parentId = edit.id
+
+    console.log(data)
     setLoading(true)
     http.post('/equipment', data)
       .then(response => {
@@ -111,7 +114,7 @@ export default function EquipmentCreateModal ({
       <Paper elevation={5} className={classes.paper}>
         <Typography variant="h6">
           {
-            edit
+            edit && !edit.forParent
               ? `Editar equipamento ${edit.name}`
               : 'Criar novo equipamento'
           }
@@ -125,7 +128,7 @@ export default function EquipmentCreateModal ({
             id="name"
             label="Nome"
             name="name"
-            defaultValue={edit && edit.name}
+            defaultValue={edit && !edit.forParent ? edit.name : null}
             autoComplete="name"
             inputRef={name}
             autoFocus
@@ -138,7 +141,7 @@ export default function EquipmentCreateModal ({
             id="label"
             label="TAG"
             name="label"
-            defaultValue={edit && edit.label}
+            defaultValue={edit && !edit.forParent ? edit.label : null}
             autoComplete="label"
             inputRef={label}
             disabled={loading}
@@ -150,7 +153,7 @@ export default function EquipmentCreateModal ({
             fullWidth
             id="description"
             label="Descrição"
-            defaultValue={edit && edit.description}
+            defaultValue={edit && !edit.forParent ? edit.description : null}
             name="description"
             autoComplete="name"
             inputRef={description}
