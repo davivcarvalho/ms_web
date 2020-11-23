@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { Box, Collapse, IconButton, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Box, Button, Collapse, IconButton, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import EquipmentTableActions from './EquipmentTableActions'
+import { useHistory } from 'react-router-dom'
 
 const useRowStyles = makeStyles({
   root: {
+    cursor: 'pointer',
     '& > *': {
       borderBottom: 'unset'
     }
@@ -34,11 +36,22 @@ export function EquipmentsTableRow ({
   onDelete = () => {},
   onEdit = () => {}
 }) {
+  const [hover, setHover] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const classes = useRowStyles()
+  const router = useHistory()
+
   return (
     <React.Fragment>
-      <TableRow className={classes.root} >
+      <TableRow
+        onClick={() => router.push(`/equipamentos/${equipment.label}`)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        className={classes.root}
+        style={{
+          backgroundColor: hover ? '#eee' : '#fff'
+        }}
+      >
         { equipment.childrens
           ? (
             <TableCell>
@@ -53,7 +66,9 @@ export function EquipmentsTableRow ({
           {equipment.name}
         </TableCell>
         <TableCell >{equipment.label}</TableCell>
-        <TableCell >{equipment.description}</TableCell>
+        <TableCell >
+          {equipment.description}
+        </TableCell>
         <TableCell align="right"><EquipmentTableActions onDelete={() => onDelete(equipment.id)} onEdit={(child) => onEdit(equipment.id, child)}/></TableCell>
       </TableRow>
       <TableRow>
