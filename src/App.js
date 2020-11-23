@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen'
 import LoadingComponent from './components/LoadingComponent'
 import RegisterScreen from './screens/RegisterScreen'
 import EquipmentSelect from './screens/EquipmentSelect'
+import EquipmentDashboard from './screens/EquipmentDashboard'
 import { AnimatePresence } from 'framer-motion'
 import BottomNavigationComponent from './components/BottomNavigationComponent'
 import AppBarComponent from './components/AppBarComponent'
@@ -34,6 +35,7 @@ function App () {
             <Switch location={location} key={location.pathname}>
               <Route path="/" exact><AppLayout><HomeScreen /></AppLayout></Route>
               <Route path="/equipamentos" exact><AppLayout><EquipmentSelect /></AppLayout></Route>
+              <Route path="/equipamentos/:label" ><AppLayout><EquipmentDashboard /></AppLayout></Route>
               <Route path="/auth/login" component={LoginScreen} />
               <Route path="/auth/register" component={RegisterScreen} />
             </Switch>

@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { AccountTree, LiveHelp, Settings, Wallpaper } from '@material-ui/icons'
 import { Drawer } from '@material-ui/core'
 import { appContext } from '../../../helpers/context'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,11 +24,12 @@ const useStyles = makeStyles((theme) => ({
 export default function DrawerComponent () {
   const classes = useStyles()
   const { layout } = useContext(appContext)
+  const router = useHistory()
 
-  const handleClick = (screen) => {
-    layout.changeAppBarTitle(screen)
-
+  const handleClick = (screen, title) => {
+    layout.changeAppBarTitle(title)
     layout.toogleDrawer(true)
+    router.push(`${screen}`)
   }
 
   return (
@@ -36,32 +38,25 @@ export default function DrawerComponent () {
         component="nav"
         className={classes.root}
       >
-        <ListItem button onClick={() => handleClick('equipments')}>
-          <ListItemIcon>
-            <Settings />
-          </ListItemIcon>
-          <ListItemText primary="Equipamentos" />
-        </ListItem>
-        <ListItem button onClick={() => handleClick('drawers')}>
+        <ListItem button onClick={() => handleClick('desenhos', 'Desenhos')}>
           <ListItemIcon>
             <Wallpaper />
           </ListItemIcon>
           <ListItemText primary="Desenhos" />
         </ListItem>
-        <ListItem button onClick={() => handleClick('subEquipments')}>
+        <ListItem button onClick={() => handleClick('subEquipamentos', 'SubEquipamentos')}>
           <ListItemIcon>
             <AccountTree />
           </ListItemIcon>
           <ListItemText primary="SubEquipamentos" />
         </ListItem>
-        <ListItem button onClick={() => handleClick('helps')}>
+        <ListItem button onClick={() => handleClick('ajudas', 'Ajudas')}>
           <ListItemIcon>
             <LiveHelp />
           </ListItemIcon>
           <ListItemText primary="Ajudas" />
         </ListItem>
       </List>
-
     </Drawer>
   )
 }
