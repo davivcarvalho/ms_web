@@ -38,7 +38,7 @@ export function EquipmentsTableRow ({
   const classes = useRowStyles()
   return (
     <React.Fragment>
-      <TableRow className={classes.root}>
+      <TableRow className={classes.root} >
         { equipment.childrens
           ? (
             <TableCell>
@@ -70,12 +70,12 @@ export function EquipmentsTableRow ({
                     <TableCell align="right">Ações</TableCell>
                   </TableRow>
                 </TableHead>
-                { equipment.childrens && equipment.childrens.map(equipment => (
-
-                  <SubEquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit} />
-
-                ))}
                 <TableBody>
+                  { equipment.childrens && equipment.childrens.map(equipment => (
+
+                    <SubEquipmentsTableRow key={equipment.id} equipment={equipment} onDelete={onDelete} onEdit={onEdit} />
+
+                  ))}
                 </TableBody>
               </Table>
 
