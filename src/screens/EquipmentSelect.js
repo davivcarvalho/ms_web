@@ -86,7 +86,6 @@ export default function EquipmentSelect () {
     setOpenCreateModal(true)
   }
   const handleEquipmentDelete = (id) => {
-    console.log(id)
     const equipmentForDelete = data.find(e => e.id === id)
     if (!equipmentForDelete) return
     setEquipmentDelete(equipmentForDelete)

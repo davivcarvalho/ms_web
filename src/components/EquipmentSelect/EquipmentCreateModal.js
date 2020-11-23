@@ -72,7 +72,6 @@ export default function EquipmentCreateModal ({
     }
     if (edit && edit.forParent) data.parentId = edit.id
 
-    console.log(data)
     setLoading(true)
     http.post('/equipment', data)
       .then(response => {
