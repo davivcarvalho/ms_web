@@ -29,7 +29,7 @@ export default function DrawerComponent () {
   const handleClick = (screen, title) => {
     layout.changeAppBarTitle(title)
     layout.toogleDrawer(true)
-    router.push(`${screen}`)
+    router.push(`${router.location.pathname}/${screen}`)
   }
 
   return (

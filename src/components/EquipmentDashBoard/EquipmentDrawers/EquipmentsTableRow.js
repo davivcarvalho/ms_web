@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom'
 
 const useRowStyles = makeStyles({
   root: {
+    cursor: 'pointer',
     '& > *': {
       borderBottom: 'unset'
     }
@@ -43,6 +44,13 @@ export function EquipmentsTableRow ({
   return (
     <React.Fragment>
       <TableRow
+        onClick={() => router.push(`/equipamentos/${equipment.label}`)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        className={classes.root}
+        style={{
+          backgroundColor: hover ? '#eee' : '#fff'
+        }}
       >
         { equipment.childrens
           ? (
@@ -54,17 +62,7 @@ export function EquipmentsTableRow ({
           )
           : <TableCell />
         }
-        <TableCell
-          component="th"
-          scope="row"
-          onClick={() => router.push(`/equipamentos/${equipment.label}`)}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            cursor: 'pointer',
-            backgroundColor: hover ? '#eee' : '#fff'
-          }}
-        >
+        <TableCell component="th" scope="row">
           {equipment.name}
         </TableCell>
         <TableCell >{equipment.label}</TableCell>
